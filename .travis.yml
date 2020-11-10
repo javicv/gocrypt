@@ -1,0 +1,34 @@
+language: go
+go:
+- 1.14.x
+env:
+- BIN_NAME=gocrypt
+jobs:
+  include:
+  - stage: Test
+    script: go test -v -race ./..
+  - stage: Build
+    script: go build
+  - stage: Deploy
+    if: tag IS present
+    script:
+    - export GOOS=linux && export GOARCH=386 && go build -o ${BIN_NAME}
+    - tar -czvf ${BIN_NAME}-${TRAVIS_TAG}-${GOOS}-${GOARCH}.tgz ${BIN_NAME} LICENSE
+    - export GOOS=windows && export GOARCH=386 && go build -o ${BIN_NAME}.exe
+    - tar -czvf ${BIN_NAME}-${TRAVIS_TAG}-${GOOS}-${GOARCH}.tgz ${BIN_NAME}.exe LICENSE
+    - export GOOS=linux && GOARCH=amd64 && go build -o ${BIN_NAME}
+    - tar -czvf ${BIN_NAME}-${TRAVIS_TAG}-${GOOS}-${GOARCH}.tgz ${BIN_NAME} LICENSE
+    - export GOOS=darwin && export GOARCH=amd64 && go build -o ${BIN_NAME}
+    - tar -czvf ${BIN_NAME}-${TRAVIS_TAG}-${GOOS}-${GOARCH}.tgz ${BIN_NAME} LICENSE
+    - export GOOS=windows && export GOARCH=amd64 && go build -o ${BIN_NAME}.exe
+    - tar -czvf ${BIN_NAME}-${TRAVIS_TAG}-${GOOS}-${GOARCH}.tgz ${BIN_NAME}.exe LICENSE
+    deploy:
+      provider: releases
+      api_key:
+        secure: s4nXnXPPVKVTYR7+6aFsI55qAb+eSn4z/j0b/A1YVVyN1yLO76/YreFwJoURiqA/i4rQTCQpByTMcteId9tCZW0g2AEYI8iJicBJAMZLFu+ZvLIDB13reo1KpqE7ivEPW3LXfa2JCVIPb+6QqHHSmX6U8kZd0IcmReV6p2cXWyJuL3mArjPf4j68hCx7PoihRBUVwsYwid85AccUyf3NFHMTy71avrl0oxyIwbUiq/4nSyIu6Bit3H4BeFw80TLPLlGv80vIV3uFxEEpLU2+1Qd4tVohOTjewRrqHNd2h5P9IUt8VM/VMSd3HLvzkT7HCMt6d/IjajYJ5rREIBrOJLYDYN/9hAq6xFEu071k7j4H6/E0Dz0drEbtrMmgO9nDjxr8m8lN0rlrF18N5hIUtMGEfVndqeS8a+rdQfv2F/Et4bUFbaMehJR70x6b1OCX00UvNpEVupsWwEpmd7ByMmAAhViMKAAlzFn0+0uxEkDvx1mdIhetorpa76tUdAaM0+gBz9NX8bG0vDXKFnR8XGac7w+ON4fG7Fy+v1GvyRAuYoaZVrlKJCvf6ruPCsXEzTCo34nPPqhS+fQ6Y/BXFxreKspSXW/stlvCXaqsvcZblJUHubBpPVAU7yeWzzOcs5wukemhEfuuX578mODqonFnlhGUQ0u3PJ5rP9OytkY=
+      file_glob: true
+      file: "./*.tgz"
+      skip_cleanup: true
+      on:
+        repo: javicv/gocrypt
+        tags: true
