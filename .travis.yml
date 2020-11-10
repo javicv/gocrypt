@@ -6,7 +6,7 @@ env:
 jobs:
   include:
   - stage: Test
-    script: go test -v -race ./..
+    script: go test -v -race ./...
   - stage: Build
     script: go build
   - stage: Deploy

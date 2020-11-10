@@ -30,8 +30,6 @@ use: %s [-e|-d] PASSWORD VALUE
 	hasher.Write([]byte(password))
 	key := hasher.Sum(nil)
 
-	fmt.Fprintf(os.Stderr, "METHOD: %s\nPASSWORD: %s\nVALUE: %s\n", method, password, value)
-
 	var result string
 	if method == "-e" {
 		ciph, err := encrypt(value, key)
@@ -54,7 +52,7 @@ use: %s [-e|-d] PASSWORD VALUE
 		}
 		result = string(ciph)
 	}
-	fmt.Printf("Result: %s\n", result)
+	fmt.Printf("%s: %s\n", value, result)
 }
 
 func encrypt(plaintext []byte, key []byte) ([]byte, error) {
