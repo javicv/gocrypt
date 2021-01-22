@@ -4,11 +4,21 @@
 # gocrypt
 Symmetric encryption/decryption command line utility
 
-## Instructions
-To encrypt or decrypt symply execute like this
+## Usage
+To encrypt or decrypt follow this instructions
 
-```$ gocrypt [-e|-d] PASSWORD VALUE```
-
-where:
-* **-e:** Encrypt (the output will be base64-encoded)
-* **-d:** Decrypt (the value should be base64-encoded)
+```
+Usage of gocrypt:
+  -m string
+        Method to use encrypt/decrypt (default "encrypt")
+  -method string
+        Method to use encrypt/decrypt (default "encrypt")
+  -p string
+        Password to encrypt/decrypt the value
+  -password string
+        Password to encrypt/decrypt the value
+  -v string
+        Value to encrypt/decrypt
+  -value string
+        Value to encrypt/decrypt
+```
